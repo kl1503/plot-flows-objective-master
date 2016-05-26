@@ -1,6 +1,6 @@
 # Plotting
 import matplotlib as mpl
-
+from .velocities import *
 # Select the graphics back end
 # Apparently this has to happen 
 # before importing pyplot.
@@ -12,6 +12,15 @@ from mpl_toolkits.mplot3d import Axes3D
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
+#bx = fig.add_subplot(projection = '3d')
+
+'''
+#This function plots the vector field
+def VectorField(bx, Velocity = None)：
+    if Velocity is not None:
+
+       
+'''
 
 # This function plots streaklines.
 def StreakPlot(ax, ParticleField = None):

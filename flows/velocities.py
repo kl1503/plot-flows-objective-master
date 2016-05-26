@@ -163,6 +163,16 @@ def Womersley(xy, t, extra_args):
 	
 	return vels
 	
+# Blasius Boundary Layer
+def Blasius(xy, t, extra_args):
+    x, y = Parse_Vector_2d(xy)
+	
+    u_vel = U * 
+    v_vel = 
+	
+    vels = np.append(u_vel, v_vel)
+    return vels
+	
 	
 
 
