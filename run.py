@@ -21,7 +21,7 @@ z = np.zeros(len(x))
 y0 = [x, y, z]
 
 # Flow type
-flow_type = "hama"
+flow_type = "oscillatingplane"
 
 if flow_type == "hama":
 	# Domain
@@ -76,6 +76,25 @@ elif flow_type == "womersley":
 	
 	extra_args = [Wn, Rho, c, R, Mu, f]
 
+elif flow_type == "oscillatingplane":
+
+    # Domain
+    xd = (-15, 15)
+    yd = (-3, 3)
+    zd = (-1, 1)
+	
+    # Kinetic Viscosity
+    Nu = 1
+	
+	# Initial Velocity
+    U_0 = 5
+ 
+	# Frequency
+    f = 4 
+	
+    extra_args = [f, Nu, U_0]
+	
+	
 # Plot type
 plot_type = "streak"
 
