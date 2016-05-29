@@ -162,7 +162,7 @@ def Womersley(xy, t, extra_args):
 	vels = np.append(u_vel, v_vel)
 	
 	return vels
-	
+'''
 # Blasius Boundary Layer
 def Blasius(xy, t, extra_args):
     x, y = Parse_Vector_2d(xy)
@@ -172,6 +172,31 @@ def Blasius(xy, t, extra_args):
 	
     vels = np.append(u_vel, v_vel)
     return vels
+'''
+# OscillatingPlane
+def OscillatingPlane(xy, t, extra_args):
+    x, y = Parse_Vector_2d(xy)
+	
+	#Frequency
+    Omega = extra_args[0]
+	
+	#Viscosity
+    Nu = extra_args[1]
+	
+	#Initial Velocity
+    u_o = extra_args[2]
+	
+	#Non-dimentional Convert
+    Y = y / np.power((Nu/Omega),1/2)
+    T = Omega * t
+	
+    u_vel = u_o * np.exp(-Y/np.sqrt(2))* np.sin(T - Y / np.sqrt(2))
+    v_vel = np.zeros((y.shape[0]))
+	
+    vels = np.append(u_vel, v_vel)
+	
+    return vels
+	
 	
 	
 

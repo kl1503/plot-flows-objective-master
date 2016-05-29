@@ -93,6 +93,8 @@ class ParticleField:
                 xy = (odeint(Womersley, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
             elif "blasius" in flow_type.lower():
                 xy = (odeint(Blasius, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
+            elif "oscillatingplane" in flow_type.lower():
+                xy = (odeint(OscillatingPlane, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
             # Extract the new positions
             x_new, y_new = Parse_Vector_2d(xy);
             
@@ -355,7 +357,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = CircularPipe(xy0, t, extra_args)
+                uv = Womersley(xy0, t, extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
@@ -365,7 +367,7 @@ class Particle:
 			
 			    # New position
                 try:
-                    xy = (odeint(Womersley, y0 = xy0, t = t, args = (extra_args,)))[1, :];
+                    xy = (odeint(Blasius, y0 = xy0, t = t, args = (extra_args,)))[1, :];
                 except:
                     print("Error integrating!");
                     
@@ -379,7 +381,24 @@ class Particle:
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
                 self.Velocity.V = uv[1];
-			
+            if "oscillatingplane" in flow_type.lower():
+                
+                # New position
+                try:
+                    xy = (odeint(OscillatingPlane, y0 = xy0, t = t, args = (extra_args,)))[1, :];
+                except:
+                    print("Error integrating!");
+                    
+                # Extract the new positions
+                self.Position.Current.X = xy[0];
+                self.Position.Current.Y = xy[1];
+                
+                # New velocity
+                uv = OscillatingPlane(xy0, t, extra_args)
+
+                # Extract the new velocities
+                self.Velocity.U = uv[0];
+                self.Velocity.V = uv[1];
     
     # This method checks whether a particle is
     # within a domain, and returns a boolean
