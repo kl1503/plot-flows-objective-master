@@ -1,6 +1,8 @@
 # Plotting
 import matplotlib as mpl
+import numpy as np
 from .velocities import *
+from .particles import *
 # Select the graphics back end
 # Apparently this has to happen 
 # before importing pyplot.
@@ -14,12 +16,15 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
 
 
+
 #This function plots the vector field of velocities
-def VectorField(bx, Velocity = None, flow_type)：
+def VectorField(ax, Velocity = None):
     if Velocity is not None:
 	     
 		 
         x, y, z = np.meshgrid(np.arange(-0.8, 1, 0.2), np.arange(-0.8, 1, 0.2), np.arange(-0.8, 1, 0.8))
+		
+        xy = np.append(x,y)
 		
 		
     

@@ -1,4 +1,3 @@
-
 # Numpy for array operations, etc.
 # import numpy as np
 
@@ -43,7 +42,11 @@ class Parameters:
         if "path" in plot_type.lower():
             self.PeriodicDomain = False;
             self.RegenerateParticles = False;
-            
+   
+        # Vector field plot
+        if "vector" in plot_type.lower():
+            self.PeriodicDomain = False;
+            self.RegenerateParticles = False;			
                       
 # Extents of a domain
 class Domain:
@@ -149,6 +152,9 @@ class Simulation:
                 elif "time" in plot_type:
                     TimelinePlot(ax, ParticleField = self.ParticleField);
                 
+                elif "vector" in plot_type:
+                    VectorField(ax, Velocity = self.Velocity);
+				
                 
                 ax.set_xlim(xd);
                 ax.set_ylim([-2, 2]);

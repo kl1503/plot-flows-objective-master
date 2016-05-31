@@ -1,6 +1,7 @@
 import numpy as np
 import pdb
 import scipy
+
 # This function parses a vector
 # of dimensions [2n x 1] into 
 # two vectors each of length [n x 1]
