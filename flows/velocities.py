@@ -79,7 +79,6 @@ def HamaVelocity(xy, t, extra_args):
     # Concatonate into a list
     return vels;
 
-	
 def UniformVelocity(xy, t, extra_args):
     
     # Parse the input
@@ -97,6 +96,7 @@ def UniformVelocity(xy, t, extra_args):
     vels = np.append(u_vel, v_vel);
     
     return vels;
+
 # CircularPipe velocity function  	
 def CircularPipe(xy, t, extra_args):
 
@@ -162,6 +162,7 @@ def Womersley(xy, t, extra_args):
 	vels = np.append(u_vel, v_vel)
 	
 	return vels
+	
 '''
 # Blasius Boundary Layer
 def Blasius(xy, t, extra_args):
@@ -173,6 +174,8 @@ def Blasius(xy, t, extra_args):
     vels = np.append(u_vel, v_vel)
     return vels
 '''
+
+
 # OscillatingPlane
 def OscillatingPlane(xy, t, extra_args):
     x, y = Parse_Vector_2d(xy)
@@ -190,19 +193,14 @@ def OscillatingPlane(xy, t, extra_args):
     Y = y / np.power((Nu/Omega),1/2)
     T = Omega * t
 	
+	#Exact Solution
     u_vel = u_o * np.exp(-Y/np.sqrt(2))* np.sin(T - Y / np.sqrt(2))
     v_vel = np.zeros((y.shape[0]))
 	
+	#Append to 1D
     vels = np.append(u_vel, v_vel)
 	
     return vels
-	
-	
-	
-
-
-
-
 
 
 

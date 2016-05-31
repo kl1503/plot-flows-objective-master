@@ -12,15 +12,24 @@ from mpl_toolkits.mplot3d import Axes3D
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
-#bx = fig.add_subplot(projection = '3d')
 
-'''
-#This function plots the vector field
-def VectorField(bx, Velocity = None)：
+
+#This function plots the vector field of velocities
+def VectorField(bx, Velocity = None, flow_type)：
     if Velocity is not None:
+	     
+		 
+        x, y, z = np.meshgrid(np.arange(-0.8, 1, 0.2), np.arange(-0.8, 1, 0.2), np.arange(-0.8, 1, 0.8))
+		
+		
+    
+        ax.quiver(x, y, z, u, v, w, length = 0.1)
 
-       
-'''
+        plt.show()
+
+
+   
+
 
 # This function plots streaklines.
 def StreakPlot(ax, ParticleField = None):
