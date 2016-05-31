@@ -75,7 +75,6 @@ elif flow_type == "womersley":
 	f = 7
 	
 	extra_args = [Wn, Rho, c, R, Mu, f]
-
 elif flow_type == "oscillatingplane":
 
     # Domain
