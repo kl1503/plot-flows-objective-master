@@ -120,9 +120,9 @@ class Simulation:
         yd = list(self.Domain.Y);
         
         # if make_plots:
-        fig = plt.figure();
-        ax = fig.add_subplot(111, projection = '3d');
-        line1, = ax.plot([], [], [], '-k');
+        #fig = plt.figure();
+        #ax = fig.add_subplot(projection = '3d');
+        #line1, = ax.plot([], [], [], '-k');
         #fig.show();
        
         
@@ -153,7 +153,7 @@ class Simulation:
                     TimelinePlot(ax, ParticleField = self.ParticleField);
                 
                 elif "vector" in plot_type:
-                    VectorField(ax, Velocity = self.Velocity);
+                    VectorField(ax, ParticleField = self.ParticleField);
 				
                 
                 ax.set_xlim(xd);
