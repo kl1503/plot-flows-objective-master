@@ -83,8 +83,10 @@ class ParticleField:
             # velocity functions
             xy0 = np.array(x0 + y0);
             # xy0 = np.array([x0, y0]);
+            print(xy0)
     
             # Choose between fields 
+			# Time vector has incorrect shape
             if "hama" in flow_type.lower():
                 xy = (odeint(HamaVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
                 uv = HamaVelocity(xy0, t, extra_args)
@@ -154,9 +156,9 @@ class ParticleField:
             z.append(particle.Position.Current.Z)
 			
 			# Get velocity of one point
-            u.append(particle.Velocity.U)
-            v.append(particle.Velocity.V)
-            w.append(particle.Velocity.W)
+            u = particle.Velocity.U
+            v = particle.Velocity.V
+            w = particle.Velocity.W
                        
 
         return x, y, z, u, v, w;
