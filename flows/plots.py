@@ -17,20 +17,34 @@ ax = fig.add_subplot(111, projection = '3d')
 
 
 
-#This function plots the vector field of velocities
+# This function plots the vector field of velocities
+# Todo: Convert list to array
+# Get Correct velocity
 def VectorField(ax, ParticleField = None):
     if ParticleField is not None:
 	
         # Get all velocities
         x, y, z, u, v, w = ParticleField.GetVelocity()
-	  
+        print(x)
+        print(y)
+        #print(z)
+        print(u)
+        print(v)
+        #print(w)
+		
+        # Meshgrid the vectors
+        x_rec, y_rec, u_rec, v_rec = np.meshgrid(x, y, u, v)
+		
+        print(x_rec)
+        print(y_rec)
+		
+        print(u_rec)
+        print(v_rec)
+		
         # Plot Vector field of velocity
-        ax.quiver(x, y, z, u, v, w, length = 0.1)
+        ax.quiver(x_rec, y_rec, u_rec, v_rec)
 
-        #plt.show()
-
-
-   
+        plt.show()
 
 
 # This function plots streaklines.
