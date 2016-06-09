@@ -22,26 +22,9 @@ def Parse_Vector_3d(xyz):
 	x = xyz[0 : breakpoint]
 	y = xyz[breakpoint : 2 * breakpoint]
 	z = zyz[2 * breakpoint : 3 * breakpoint]
+	
+	return x, y, z;
 '''
-
-# Poiseuille velocity function
-# Not sure if this is working right now.
-def PoiseuilleVelocity(xy, t, args1):
-
-    # Parameters
-    amp = args1[0];
-    freq = args1[1];
-    
-    # Coordinates
-    x = xy[0];
-    y = xy[1];
-    
-    # Calculate velocities
-    u_vel = amp * (1 - y**2);
-    v_vel = amp * np.sin(2 * np.pi * (freq * x  + t));
-    
-    # Return u and v
-    return [u_vel.astype(float), v_vel.astype(float)];
  
 # Hama velocity function   
 def HamaVelocity(xy, t, extra_args):
@@ -80,26 +63,28 @@ def HamaVelocity(xy, t, extra_args):
     # Concatonate into a list
     return vels;
 
+# UniformVelocity function
 def UniformVelocity(xy, t, extra_args):
     
     # Parse the input
     x, y = Parse_Vector_2d(xy);
     
-    num_points = len(x);
-    
+	# a represents u_o/U
+    a = extra_args[0]
+	
+	# define U
+    U = 1
+	
     # Velocity
-    u_o = extra_args * np.ones((num_points,), dtype = np.float);
-    v_o = 0 * np.ones((num_points,), dtype = np.float);
-    
-    u_vel = u_o;
-    v_vel = v_o;
-    
-    vels = np.append(u_vel, v_vel);
+    u_o = np.full((1, x.shape[0]), a * U);
+    v_o = np.zeros(y.shape[0]);
+        
+    vels = np.append(u_o, v_o);
     
     return vels;
 
-# CircularPipe velocity function  	
-def CircularPipe(xy, t, extra_args):
+# Poiseuille velocity function  	
+def PoiseuilleVelocity(xy, t, extra_args):
 
     # Parse the input
 	x, y = Parse_Vector_2d(xy)
