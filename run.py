@@ -21,7 +21,7 @@ z = np.zeros(len(x))
 y0 = [x, y, z]
 
 # Flow type
-flow_type = "cpipe"
+flow_type = "poiseuille"
 
 if flow_type == "hama":
 	# Domain
@@ -34,7 +34,7 @@ if flow_type == "hama":
 	alpha = 1
 	c = 1
 	extra_args = [a, alpha, c]
-elif flow_type == "cpipe":
+elif flow_type == "poiseuille":
 	# Domain
 	xd = (-1.1, 100)
 	yd = (-3, 3)
@@ -48,6 +48,16 @@ elif flow_type == "cpipe":
 	R = 2
 	
 	extra_args = [u_max, R]
+elif flow_type == "uniform":
+	# Domain
+	xd = (-1.1, 100)
+	yd = (-3, 3)
+	zd = (-1, 1)
+	
+	# Velocity Constant
+	a = 5
+
+	extra_args = [a]
 elif flow_type == "womersley":
 	# Domain
 	xd = (-5, 5)
@@ -86,16 +96,16 @@ elif flow_type == "oscillatingplane":
     Nu = 1
 	
 	# Initial Velocity
-    U_0 = 5
+    U_o = 5
  
 	# Frequency
     f = 4 
 	
-    extra_args = [f, Nu, U_0]
-	
+    extra_args = [f, Nu, U_o]
+
 	
 # Plot type
-plot_type = "vector"
+plot_type = "streak"
 
 # New particle distance
 NewParticleDistance = 0.1
