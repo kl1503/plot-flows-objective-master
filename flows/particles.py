@@ -89,28 +89,32 @@ class ParticleField:
 			# Time vector has incorrect shape
             if "hama" in flow_type.lower():
                 xy = (odeint(HamaVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = HamaVelocity(xy0, t, extra_args)
-            elif "cpipe" in flow_type.lower():
-                xy = (odeint(CircularPipe, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = CircularPipe(xy0, t, extra_args)
+                #uv = HamaVelocity(xy0, t, extra_args)
+            elif "poiseuille" in flow_type.lower():
+                xy = (odeint(PoiseuilleVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
+                #uv = PoiseuilleVelocity(xy0, t, extra_args)
             elif "womersley" in flow_type.lower():
                 xy = (odeint(Womersley, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = Womersley(xy0, t, extra_args)
+                #uv = Womersley(xy0, t, extra_args)
             elif "blasius" in flow_type.lower():
                 xy = (odeint(Blasius, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = Blasius(xy0, t, extra_args)
+                #uv = Blasius(xy0, t, extra_args)
             elif "oscillatingplane" in flow_type.lower():
                 xy = (odeint(OscillatingPlane, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = OscillatingPlane(xy0, t, extra_args)
+                #uv = OscillatingPlane(xy0, t, extra_args)
+            elif "uniform" in flow_type.lower():
+                xy = (odeint(UniformVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
+                #uv = UniformVelocity(xy0, t, extra_args)
+			
 			
 			# Extract the new positions
             x_new, y_new = Parse_Vector_2d(xy);
             
 			# Extract the new velocities
-            u_new, v_new = Parse_Vector_2d(uv);
+            # u_new, v_new = Parse_Vector_2d(uv);
 			
 			# Set new velocities
-            self.SetVelocity(u = u_new, v = v_new);
+            # self.SetVelocity(u = u_new, v = v_new);
 	        
             # Set the new coordinates
             self.SetCoordinates(x = x_new, y = y_new);
@@ -387,11 +391,11 @@ class Particle:
                 self.Velocity.U = uv[0];
                 self.Velocity.V = uv[1];
 				
-            if "cpipe" in flow_type.lower():
+            if "poiseuille" in flow_type.lower():
                 
                 # New position
                 try:
-                    xy = (odeint(CircularPipe, y0 = xy0, t = t, args = (extra_args,)))[1, :];
+                    xy = (odeint(PoiseuilleVelocity, y0 = xy0, t = t, args = (extra_args,)))[1, :];
                 except:
                     print("Error integrating!");
                     
@@ -400,7 +404,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = CircularPipe(xy0, t, extra_args)
+                uv = PoiseuilleVelocity(xy0, t, extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
@@ -461,7 +465,27 @@ class Particle:
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
                 self.Velocity.V = uv[1];
-    
+
+            if "uniform" in flow_type.lower():
+                
+                # New position
+                try:
+                    xy = (odeint(UniformVelocity, y0 = xy0, t = t, args = (extra_args,)))[1, :];
+                except:
+                    print("Error integrating!");
+                    
+                # Extract the new positions
+                self.Position.Current.X = xy[0];
+                self.Position.Current.Y = xy[1];
+                
+                # New velocity
+                uv = UniformVelocity(xy0, t, extra_args)
+
+                # Extract the new velocities
+                self.Velocity.U = uv[0];
+                self.Velocity.V = uv[1];
+
+				
     # This method checks whether a particle is
     # within a domain, and returns a boolean
     # for each direction of the domain
