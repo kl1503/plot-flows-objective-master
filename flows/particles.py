@@ -1,6 +1,8 @@
 # import numpy as np
 from .velocities import *
 from scipy.integrate import odeint
+import pdb
+
 
 # Velocity vector class
 class Velocity:
@@ -89,36 +91,37 @@ class ParticleField:
 			# Time vector has incorrect shape
             if "hama" in flow_type.lower():
                 xy = (odeint(HamaVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                #uv = HamaVelocity(xy0, t, extra_args)
+                uv = HamaVelocity(xy0, tf, extra_args)
             elif "poiseuille" in flow_type.lower():
                 xy = (odeint(PoiseuilleVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                #uv = PoiseuilleVelocity(xy0, t, extra_args)
+                uv = PoiseuilleVelocity(xy0, tf, extra_args)
             elif "womersley" in flow_type.lower():
                 xy = (odeint(Womersley, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                #uv = Womersley(xy0, t, extra_args)
+                uv = Womersley(xy0, tf, extra_args)
             elif "blasius" in flow_type.lower():
                 xy = (odeint(Blasius, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                #uv = Blasius(xy0, t, extra_args)
+                uv = Blasius(xy0, tf, extra_args)
             elif "oscillatingplane" in flow_type.lower():
                 xy = (odeint(OscillatingPlane, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                #uv = OscillatingPlane(xy0, t, extra_args)
+                uv = OscillatingPlane(xy0, tf, extra_args)
             elif "uniform" in flow_type.lower():
                 xy = (odeint(UniformVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                #uv = UniformVelocity(xy0, t, extra_args)
+                uv = UniformVelocity(xy0, tf, extra_args)
 			
 			
 			# Extract the new positions
             x_new, y_new = Parse_Vector_2d(xy);
             
 			# Extract the new velocities
-            # u_new, v_new = Parse_Vector_2d(uv);
+            u_new, v_new = Parse_Vector_2d(uv);
 			
 			# Set new velocities
-            # self.SetVelocity(u = u_new, v = v_new);
+            self.SetVelocity(u = u_new, v = v_new);
 	        
             # Set the new coordinates
             self.SetCoordinates(x = x_new, y = y_new);
-    
+             
+            #pdb.set_trace()
 	
     # This function sets the velocities of the vectorfield
     def SetVelocity(self, u = None, v = None, w = None):
@@ -128,13 +131,11 @@ class ParticleField:
         num_particles = self.Count;
 
         # Loop over all the points in vectorfield
-        for k in range(num_particles):
-            particle = self.Particles[k];
-		
-            # Extract the new velocities
-            particle.Velocity.U = u;
-            particle.Velocity.V = v;
-            particle.Velocity.W = w;
+      		
+        # Extract the new velocities
+        particle.Velocity.U = u;
+        particle.Velocity.V = v;
+        particle.Velocity.W = w;
 	
 	# This function gets the velocities of the vectorfield
     def GetVelocity(self):
@@ -150,19 +151,17 @@ class ParticleField:
 		# Read Number of Particles
         num_particles = self.Count;
 
-        # Loop over all the points in vectorfield
-        for k in range(num_particles):
-            particle = self.Particles[k];
+        
 			
-			# Get position of one point
-            x.append(particle.Position.Current.X)
-            y.append(particle.Position.Current.Y)
-            z.append(particle.Position.Current.Z)
+		# Get position of one point
+        x.append(particle.Position.Current.X)
+        y.append(particle.Position.Current.Y)
+        z.append(particle.Position.Current.Z)
 			
-			# Get velocity of one point
-            u = particle.Velocity.U
-            v = particle.Velocity.V
-            w = particle.Velocity.W
+		# Get velocity of one point
+        u = particle.Velocity.U
+        v = particle.Velocity.V
+        w = particle.Velocity.W
                        
 
         return x, y, z, u, v, w;
@@ -385,7 +384,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = HamaVelocity(xy0, t, extra_args)
+                uv = HamaVelocity(xy0, t[1], extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
@@ -404,7 +403,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = PoiseuilleVelocity(xy0, t, extra_args)
+                uv = PoiseuilleVelocity(xy0, t[1], extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
@@ -423,7 +422,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = Womersley(xy0, t, extra_args)
+                uv = Womersley(xy0, t[1], extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
@@ -433,7 +432,7 @@ class Particle:
 			
 			    # New position
                 try:
-                    xy = (odeint(Blasius, y0 = xy0, t = t, args = (extra_args,)))[1, :];
+                    xy = (odeint(Blasius, y0 = xy0, t = t[1], args = (extra_args,)))[1, :];
                 except:
                     print("Error integrating!");
                     
@@ -460,7 +459,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = OscillatingPlane(xy0, t, extra_args)
+                uv = OscillatingPlane(xy0, t[1], extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];
@@ -479,7 +478,7 @@ class Particle:
                 self.Position.Current.Y = xy[1];
                 
                 # New velocity
-                uv = UniformVelocity(xy0, t, extra_args)
+                uv = UniformVelocity(xy0, t[1], extra_args)
 
                 # Extract the new velocities
                 self.Velocity.U = uv[0];

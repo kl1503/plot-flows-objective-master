@@ -89,14 +89,18 @@ def PoiseuilleVelocity(xy, t, extra_args):
     # Parse the input
 	x, y = Parse_Vector_2d(xy)
 	
+	# Velocity Constant
+	a = extra_args[0]
+	
+	
 	# Maximum Velocity
-	umax = extra_args[0]
+	umax = 1
 	
 	# Pipe radius
-	R = extra_args[1]
+	R = 1
 	
     # Mean horizontal velocity and vertical velocities
-	u_vel = umax * (1 - np.power(y, 2) / np.power(R, 2))
+	u_vel = umax * a * (1 - np.power(y, 2) / np.power(R, 2))
 	v_vel = np.zeros((y.shape[0]))
 	
 	#pdb.set_trace();
@@ -113,19 +117,22 @@ def Womersley(xy, t, extra_args):
 	x, y = Parse_Vector_2d(xy)
 	
 	#Radius
-	R = extra_args[3]
+	#R = extra_args[3]
+	R = 1
 	
 	#Frequency
-	Omega = extra_args[5]
+	Omega = extra_args[2]
 	
 	#Density
-	Rho = extra_args[1]
+	#Rho = extra_args[1]
+	Rho = 1
 	
 	#Dynamic Viscosity
-	Mu = extra_args[4]
+	#Mu = extra_args[4]
+	Mu = 1
 	
 	#Complex Number
-	A = extra_args[2]
+	A = extra_args[1]
 		
 	#Kinematic Viscosity
 	#Nu = Mu / Rho
@@ -133,14 +140,14 @@ def Womersley(xy, t, extra_args):
 	#pdb.set_trace();
 	
 	#Womersley Number
-	Alpha = extra_args[0]
+	Wm = extra_args[0]
 	
 	#Parts of Womersley Flow Solution
-	v1 = y * np.power(1j,3/2) * Alpha / R 
-	v2 = np.power(1j,3/2) * Alpha 
+	v1 = y * np.power(1j,3/2) * Wm / R 
+	v2 = np.power(1j,3/2) * Wm 
 	
 	# Mean horizontal velocity and vertical velocities
-	u_vel = (- A * np.power(R, 2) / 1j / Mu / np.power(Alpha, 2) * (1 - scipy.special.jv(0,v1)/ scipy.special.jv(0,v2)) * np.exp(1j * Omega * t)).real
+	u_vel = (- A * np.power(R, 2) / 1j / Mu / np.power(Wm, 2) * (1 - scipy.special.jv(0,v1)/ scipy.special.jv(0,v2)) * np.exp(1j * Omega * t)).real
 	v_vel = np.zeros((y.shape[0]))
 	
 	#pdb.set_trace();
@@ -170,10 +177,12 @@ def OscillatingPlane(xy, t, extra_args):
     Omega = extra_args[0]
 	
 	#Viscosity
-    Nu = extra_args[1]
+    #Nu = extra_args[1]
+    Nu = 1
 	
 	#Initial Velocity
-    u_o = extra_args[2]
+    #u_o = extra_args[2]
+    u_o = 1
 	
 	#Non-dimentional Convert
     Y = y / np.power((Nu/Omega),1/2)
