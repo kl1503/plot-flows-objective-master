@@ -40,14 +40,11 @@ elif flow_type == "poiseuille":
 	yd = (-3, 3)
 	zd = (-1, 1)
 	
-	#CircularPipe flow constants
-	#Maximum Velocity
-	u_max = 5
+	# Velocity Constant
+	a = 5
 	
-	#Radius
-	R = 2
 	
-	extra_args = [u_max, R]
+	extra_args = [a]
 elif flow_type == "uniform":
 	# Domain
 	xd = (-1.1, 100)
@@ -69,22 +66,13 @@ elif flow_type == "womersley":
 	#Womersley Number
 	Wn = 0.1
 	
-	#Density
-	Rho = 3
-
 	# Complex Number
 	c = 12 + 30j
-	
-	#Radius
-	R = 1
-	
-	#Dynamic Viscosity
-	Mu = 1
-		
+				
 	#Frequency 
 	f = 7
 	
-	extra_args = [Wn, Rho, c, R, Mu, f]
+	extra_args = [Wn, c, f]
 elif flow_type == "oscillatingplane":
 
     # Domain
@@ -92,16 +80,10 @@ elif flow_type == "oscillatingplane":
     yd = (-3, 3)
     zd = (-1, 1)
 	
-    # Kinetic Viscosity
-    Nu = 1
-	
-	# Initial Velocity
-    U_o = 5
- 
 	# Frequency
     f = 4 
 	
-    extra_args = [f, Nu, U_o]
+    extra_args = [f]
 
 	
 # Plot type
