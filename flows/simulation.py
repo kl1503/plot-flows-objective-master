@@ -86,11 +86,18 @@ class Simulation:
             x = y0[0];
             y = y0[1];
             z = y0[2];
-            # Create a particle field
-            field = ParticleField(x, y, z);
             
-            # Assign the field to the simulation;
-            self.ParticleField = field;
+            if "vector" in plot_type.lower():
+                field = VelocityField(x, y, z);
+				
+                self.VelocityField = field;
+				
+            elif "streak" in plot_type.lower() or "path" in plot_type.lower():
+			    # Create a particle field
+                field = ParticleField(x, y, z);
+            
+                # Assign the field to the simulation;
+                self.ParticleField = field;
             
             # Assign the initial time and the time step
             start_time = time[0];
@@ -100,7 +107,7 @@ class Simulation:
             # Make the time object
             time = Time(start_time, stop_time, step_time);
             
-            # Assign the time object to the simulation
+			# Assign the time object to the simulation
             self.Time = time;
             
             # Counter to keep track of the iterations
@@ -129,39 +136,45 @@ class Simulation:
         # Read the plot type
         plot_type = self.Parameters.PlotType.lower();
         
+        
         # Run while the current time is
         # less than the stopping time
         try:
-            while current_time < stop_time and (self.ParticleField.Count) > 0:
-                
-                # Proceed with the next time step
+            if "vector" in plot_type:
                 self.Step();
+				
+                VectorField(ax, VelocityField = self.VelocityField);
+				
+            else: 
+                while current_time < stop_time and (self.ParticleField.Count) > 0:
                 
-                # Clear axes
-                ax.clear();
-                plt.hold(True)
+                    # Proceed with the next time step
+                    self.Step();
                 
-                # Check streaklines plot
-                if "streak" in plot_type:
-                    StreakPlot(ax, ParticleField = self.ParticleField);
-                    #x_streak, y_streak, z_streak, d_streak = self.ParticleField.GetStreaklines();
+                    # Clear axes
+                    ax.clear();
+                    plt.hold(True)
+                
+                    # Check streaklines plot
+                    if "streak" in plot_type:
+                        StreakPlot(ax, ParticleField = self.ParticleField);
+                        #x_streak, y_streak, z_streak, d_streak = self.ParticleField.GetStreaklines();
                     
-                elif "path" in plot_type:
-                    PathlinePlot(ax, ParticleField = self.ParticleField);
+                    elif "path" in plot_type:
+                        PathlinePlot(ax, ParticleField = self.ParticleField);
                     
-                elif "time" in plot_type:
-                    TimelinePlot(ax, ParticleField = self.ParticleField);
+                    elif "time" in plot_type:
+                        TimelinePlot(ax, ParticleField = self.ParticleField);
                 
-                elif "vector" in plot_type:
-                    VectorField(ax, ParticleField = self.ParticleField);
+                
 				
                 
-                ax.set_xlim(xd);
-                ax.set_ylim([-2, 2]);
-                fig.canvas.draw();
-                time.sleep(0.05)
-                current_time = self.Time.Current;
-                plt.pause(0.0001)
+                    ax.set_xlim(xd);
+                    ax.set_ylim([-2, 2]);
+                    fig.canvas.draw();
+                    time.sleep(0.05)
+                    current_time = self.Time.Current;
+                    plt.pause(0.0001)
                 
         except KeyboardInterrupt:
             pass
@@ -170,11 +183,15 @@ class Simulation:
     # This iterates the simulation        
     def Step(self):
         
+        plot_type = self.Parameters.PlotType.lower();
+		
+		
         # Advance the iteration number
         counter = next(self.IterationNumber);
         
-        # Age the particles by one step
-        self.ParticleField.Age();
+		# Age the particles by one step
+        if "vector" not in plot_type:
+            self.ParticleField.Age();
         
         # Print
         #print("On iteration " + str(counter));
@@ -185,25 +202,33 @@ class Simulation:
         #print(t0)
         #print(dt)
         
-        # Advect the particles
-        self.ParticleField.Advect(flow_type = self.Parameters.FlowType,
-            t0 = t0, dt = dt, extra_args = self.Parameters.ExtraArgs);
-        
-        # Remove the dead particles
-        # and add some more back in
-        self.CircleOfLife();
-        
-        # Count the number of particles
-        num_alive = self.ParticleField.Count;
-        
-        # Print the number alive
-        #print("Live particles: " + str(num_alive));
-        
-        # Increment the time counter
-        self.Time.Current += dt;
-        
-        # Print a blank line
-        #print();
+		#Choose between plot type
+        if "vector" in plot_type:
+		    # Advect the field
+            self.VelocityField.Advect(flow_type = self.Parameters.FlowType,
+                t0 = t0, dt = dt, extra_args = self.Parameters.ExtraArgs);
+				
+            self.Time.Current += dt;
+        else: 
+			# Advect the particles
+            self.ParticleField.Advect(flow_type = self.Parameters.FlowType,
+                t0 = t0, dt = dt, extra_args = self.Parameters.ExtraArgs);
+			
+			# Remove the dead particles
+			# and add some more back in
+            self.CircleOfLife();
+			
+			# Count the number of particles
+            num_alive = self.ParticleField.Count;
+			
+			# Print the number alive
+			#print("Live particles: " + str(num_alive));
+			
+			# Increment the time counter
+            self.Time.Current += dt;
+			
+			# Print a blank line
+			#print();
 
     # This method creates and destroys particles
     # between time steps.

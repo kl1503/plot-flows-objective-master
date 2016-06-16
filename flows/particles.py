@@ -1,4 +1,4 @@
-# import numpy as np
+import numpy as np
 from .velocities import *
 from scipy.integrate import odeint
 import pdb
@@ -33,7 +33,91 @@ class Position:
         # fields for X, Y, Z mainly 
         # to make the origin immutable.
         self.Origin = (X, Y, Z);  
+
+# This class represents the entire field with the velocities vector
+class VelocityField:
+    def __init__(self, x = [0,], y = [0,], z = [0,]):
+		
+		# Initialize field
+        xv = np.linspace(-5, 5, num = 11, endpoint = True)
+        yv = np.linspace(-5, 5, num = 11, endpoint = True)
+        zv = np.linspace(-5, 5, num = 11, endpoint = True)
+	    
+		# Meshgrid field
+        xm, ym, zm = np.meshgrid(xv, yv, zv)
+		
+        # Save coordinates
+        self.CartesianCoordinates = xm, ym, zm;
+        pdb.set_trace()
+		# Initialize Velocity
+        vel = Velocity([], [], []);
+        self.Velocity = vel;
+
+    def Advect(self, flow_type = None, t0 = 0, dt = 0, extra_args = None):
+	    
+        if flow_type is not None:
+            # Retrieve coordinates
+            x0 = self.CartesianCoordinates.X;
+            y0 = self.CartesianCoordinates.Y;
+            z0 = self.CartesianCoordinates.Z;
+            xy0 = np.array(x0.tolist() + y0.tolist());
+			
+            # Time vector
+            tf = t0 + dt;
+            
+			# Choose between fields 
+            if "hama" in flow_type.lower():
+                uv = HamaVelocity(xy0, tf, extra_args)
+            elif "poiseuille" in flow_type.lower():               
+                uv = PoiseuilleVelocity(xy0, tf, extra_args)
+            elif "womersley" in flow_type.lower():               
+                uv = Womersley(xy0, tf, extra_args)
+            elif "blasius" in flow_type.lower():              
+                uv = Blasius(xy0, tf, extra_args)
+            elif "oscillatingplane" in flow_type.lower():      
+                uv = OscillatingPlane(xy0, tf, extra_args)
+            elif "uniform" in flow_type.lower():
+                uv = UniformVelocity(xy0, tf, extra_args)
+				
+     	    # Extract the new velocities
+            u_new, v_new = Parse_Vector_2d(uv);
+            pdb.set_trace()  
+			# Set new velocities (2D for now)
+            self.SetVelocity(u_new, v_new);
+			
+			
+	# This function sets the velocities of the vectorfield
+    def SetVelocity(self, u_new = 0, v_new = 0):
+		      
+      	# Extract the new velocities
+        self.Velocity.U = u_new;
+        self.Velocity.V = v_new;
+        self.Velocity.W = np.zeros(u_new.shape[0]);
+	
+	# This function gets the velocities of the vectorfield
+    def GetVelocity(self):
+        # Initialize vectors
+        u = [];
+        v = [];
+        w = [];
+        x = [];
+        y = [];
+        z = [];
         
+				
+		# Get positions within the domain
+        x = self.CartesianCoordinates.X
+        y = self.CartesianCoordinates.Y
+        z = self.CartesianCoordinates.Z
+			
+		# Get velocity of one point
+        u = self.Velocity.U
+        v = self.Velocity.V
+        w = self.Velocity.W
+                       
+
+        return x, y, z, u, v, w;
+    
 # This class represents a list of particles
 # and methods that pertain to the entire field.
 class ParticleField:
@@ -62,6 +146,7 @@ class ParticleField:
         # Initial positions of the particles
         self.InitialPositions = CartesianCoordinates(x, y, z);
         
+		
     # This function advects the entire field of particles
     # according to some velocity function. 
     def Advect(self, flow_type = None, t0 = 0, dt = 0, extra_args = None):
@@ -86,87 +171,45 @@ class ParticleField:
             xy0 = np.array(x0 + y0);
             # xy0 = np.array([x0, y0]);
             print(xy0)
+            pdb.set_trace()
     
             # Choose between fields 
 			# Time vector has incorrect shape
             if "hama" in flow_type.lower():
                 xy = (odeint(HamaVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = HamaVelocity(xy0, tf, extra_args)
+                #uv = HamaVelocity(xy0, tf, extra_args)
             elif "poiseuille" in flow_type.lower():
                 xy = (odeint(PoiseuilleVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = PoiseuilleVelocity(xy0, tf, extra_args)
+                #uv = PoiseuilleVelocity(xy0, tf, extra_args)
             elif "womersley" in flow_type.lower():
                 xy = (odeint(Womersley, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = Womersley(xy0, tf, extra_args)
+                #uv = Womersley(xy0, tf, extra_args)
             elif "blasius" in flow_type.lower():
                 xy = (odeint(Blasius, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = Blasius(xy0, tf, extra_args)
+                #uv = Blasius(xy0, tf, extra_args)
             elif "oscillatingplane" in flow_type.lower():
                 xy = (odeint(OscillatingPlane, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = OscillatingPlane(xy0, tf, extra_args)
+                #uv = OscillatingPlane(xy0, tf, extra_args)
             elif "uniform" in flow_type.lower():
                 xy = (odeint(UniformVelocity, y0 = xy0, t = t, args = (extra_args,)))[-1, :]
-                uv = UniformVelocity(xy0, tf, extra_args)
+                #uv = UniformVelocity(xy0, tf, extra_args)
 			
 			
 			# Extract the new positions
             x_new, y_new = Parse_Vector_2d(xy);
             
 			# Extract the new velocities
-            u_new, v_new = Parse_Vector_2d(uv);
+            #u_new, v_new = Parse_Vector_2d(uv);
 			
 			# Set new velocities
-            self.SetVelocity(u = u_new, v = v_new);
+            #self.SetVelocity(flow_type, tf, extra_args);
 	        
             # Set the new coordinates
             self.SetCoordinates(x = x_new, y = y_new);
              
             #pdb.set_trace()
-	
-    # This function sets the velocities of the vectorfield
-    def SetVelocity(self, u = None, v = None, w = None):
-	                    
-						
-		# Read Number of Particles
-        num_particles = self.Count;
 
-        # Loop over all the points in vectorfield
-      		
-        # Extract the new velocities
-        particle.Velocity.U = u;
-        particle.Velocity.V = v;
-        particle.Velocity.W = w;
-	
-	# This function gets the velocities of the vectorfield
-    def GetVelocity(self):
-        # Initialize vectors
-        u = [];
-        v = [];
-        w = [];
-        x = [];
-        y = [];
-        z = [];
-        
-		
-		# Read Number of Particles
-        num_particles = self.Count;
-
-        
-			
-		# Get position of one point
-        x.append(particle.Position.Current.X)
-        y.append(particle.Position.Current.Y)
-        z.append(particle.Position.Current.Z)
-			
-		# Get velocity of one point
-        u = particle.Velocity.U
-        v = particle.Velocity.V
-        w = particle.Velocity.W
-                       
-
-        return x, y, z, u, v, w;
-	
-    # This function gets all of the streaklines
+	# This function gets all of the streaklines
     def GetStreaklines(self):
         # Number of starting particles
         num_starting_points = len(self.InitialPositions.X);
