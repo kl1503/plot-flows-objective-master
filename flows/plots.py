@@ -20,11 +20,11 @@ ax = fig.add_subplot(111, projection = '3d')
 # This function plots the vector field of velocities
 # Todo: Convert list to array
 # Get Correct velocity
-def VectorField(ax, ParticleField = None):
-    if ParticleField is not None:
+def VectorField(ax, VelocityField = None):
+    if VelocityField is not None:
 	
         # Get all velocities
-        x, y, z, u, v, w = ParticleField.GetVelocity()
+        x, y, z, u, v, w = VelocityField.GetVelocity()
         print(x)
         print(y)
         #print(z)
@@ -32,8 +32,15 @@ def VectorField(ax, ParticleField = None):
         print(v)
         #print(w)
 		
+        x_new = np.asarray(x)
+        y_new = np.asarray(y)
+        z_new = np.zeros(x_new.shape[0])
+        u_new = np.asarray(u)
+        v_new = np.asarray(v)
+        w_new = np.zeros(v_new.shape[0])
+		
         # Meshgrid the vectors
-        x_rec, y_rec, u_rec, v_rec = np.meshgrid(x, y, u, v)
+        x_rec, y_rec, z_rec, u_rec, v_rec, w_rec = np.meshgrid(x, y, z, u, v, w)
 		
         print(x_rec)
         print(y_rec)
@@ -42,7 +49,7 @@ def VectorField(ax, ParticleField = None):
         print(v_rec)
 		
         # Plot Vector field of velocity
-        ax.quiver(x_rec, y_rec, u_rec, v_rec)
+        ax.quiver(x_rec, y_rec, z_rec, u_rec, v_rec, w_rec,length = 0.05)
 
         plt.show()
 

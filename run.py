@@ -21,7 +21,7 @@ z = np.zeros(len(x))
 y0 = [x, y, z]
 
 # Flow type
-flow_type = "poiseuille"
+flow_type = "hama"
 
 if flow_type == "hama":
 	# Domain
@@ -87,7 +87,7 @@ elif flow_type == "oscillatingplane":
 
 	
 # Plot type
-plot_type = "streak"
+plot_type = "vector"
 
 # New particle distance
 NewParticleDistance = 0.1
