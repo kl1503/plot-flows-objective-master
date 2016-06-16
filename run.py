@@ -43,7 +43,6 @@ elif flow_type == "poiseuille":
 	# Velocity Constant
 	a = 5
 	
-	
 	extra_args = [a]
 elif flow_type == "uniform":
 	# Domain
