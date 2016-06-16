@@ -3,6 +3,7 @@ import matplotlib as mpl
 import numpy as np
 from .velocities import *
 from .particles import *
+import pdb
 # Select the graphics back end
 # Apparently this has to happen 
 # before importing pyplot.
@@ -32,24 +33,15 @@ def VectorField(ax, VelocityField = None):
         print(v)
         #print(w)
 		
-        x_new = np.asarray(x)
-        y_new = np.asarray(y)
-        z_new = np.zeros(x_new.shape[0])
-        u_new = np.asarray(u)
-        v_new = np.asarray(v)
-        w_new = np.zeros(v_new.shape[0])
-		
+                
+        pdb.set_trace()
         # Meshgrid the vectors
-        x_rec, y_rec, z_rec, u_rec, v_rec, w_rec = np.meshgrid(x, y, z, u, v, w)
+        #x_rec, y_rec, z_rec, u_rec, v_rec, w_rec = np.meshgrid(x, y, z, u, v, w)
 		
-        print(x_rec)
-        print(y_rec)
-		
-        print(u_rec)
-        print(v_rec)
+        
 		
         # Plot Vector field of velocity
-        ax.quiver(x_rec, y_rec, z_rec, u_rec, v_rec, w_rec,length = 0.05)
+        ax.quiver(x, y, z, u, v, w,length = 1)
 
         plt.show()
 
