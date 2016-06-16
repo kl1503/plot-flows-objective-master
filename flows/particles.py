@@ -47,7 +47,8 @@ class VelocityField:
         xm, ym, zm = np.meshgrid(xv, yv, zv)
 		
         # Save coordinates
-        self.CartesianCoordinates = xm, ym, zm;
+        self.Coordinates = 	CartesianCoordinates(xm, ym, zm);
+		
         pdb.set_trace()
 		# Initialize Velocity
         vel = Velocity([], [], []);
@@ -57,10 +58,15 @@ class VelocityField:
 	    
         if flow_type is not None:
             # Retrieve coordinates
-            x0 = self.CartesianCoordinates.X;
-            y0 = self.CartesianCoordinates.Y;
-            z0 = self.CartesianCoordinates.Z;
+            x0 = self.Coordinates.X;
+            y0 = self.Coordinates.Y;
+            z0 = self.Coordinates.Z;
             xy0 = np.array(x0.tolist() + y0.tolist());
+			
+			# Get shape to resize array 
+            i = x0.shape[0];
+            j = y0.shape[0];
+            k = z0.shape[0];
 			
             # Time vector
             tf = t0 + dt;
@@ -80,8 +86,14 @@ class VelocityField:
                 uv = UniformVelocity(xy0, tf, extra_args)
 				
      	    # Extract the new velocities
-            u_new, v_new = Parse_Vector_2d(uv);
+            u, v = Parse_Vector_2d(uv);
             pdb.set_trace()  
+			# Convert 1D to 3D
+            u_new = u.reshape((i, j, k))
+            v_new = v.reshape((i, j, k))
+            #pdb.set_trace()  
+			
+           
 			# Set new velocities (2D for now)
             self.SetVelocity(u_new, v_new);
 			
@@ -92,7 +104,8 @@ class VelocityField:
       	# Extract the new velocities
         self.Velocity.U = u_new;
         self.Velocity.V = v_new;
-        self.Velocity.W = np.zeros(u_new.shape[0]);
+        self.Velocity.W = np.zeros(u_new.shape);
+        #pdb.set_trace() 
 	
 	# This function gets the velocities of the vectorfield
     def GetVelocity(self):
@@ -106,16 +119,16 @@ class VelocityField:
         
 				
 		# Get positions within the domain
-        x = self.CartesianCoordinates.X
-        y = self.CartesianCoordinates.Y
-        z = self.CartesianCoordinates.Z
+        x = self.Coordinates.X
+        y = self.Coordinates.Y
+        z = self.Coordinates.Z
 			
 		# Get velocity of one point
         u = self.Velocity.U
         v = self.Velocity.V
         w = self.Velocity.W
                        
-
+        #pdb.set_trace()
         return x, y, z, u, v, w;
     
 # This class represents a list of particles
