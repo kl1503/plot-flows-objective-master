@@ -44,11 +44,9 @@ class VelocityField:
         yv = np.linspace(y[0], y[1], num = 20, endpoint = True)
         zv = np.linspace(z[0], z[1], num = 20, endpoint = True)
 		
-        pdb.set_trace()
+        #pdb.set_trace()
 		
-        # xv = np.linspace(-5, 5, num = 11, endpoint = True)
-        # yv = np.linspace(-5, 5, num = 11, endpoint = True)
-        # zv = np.linspace(-5, 5, num = 11, endpoint = True)
+        
 	    
 		# Meshgrid field
         # xm, ym, zm = np.meshgrid(xv, yv, zv)
@@ -56,7 +54,7 @@ class VelocityField:
         # Save coordinates
         self.Coordinates = CartesianCoordinates(xv, yv, zv);
 		
-        pdb.set_trace()
+        #pdb.set_trace()
 		# Initialize Velocity
         vel = Velocity([], [], []);
         self.Velocity = vel;
@@ -75,7 +73,7 @@ class VelocityField:
             #j = y0.shape[0];
             #k = z0.shape[0];
 			
-            pdb.set_trace();
+            #pdb.set_trace();
 			
             # Time vector
             tf = t0 + dt;
@@ -96,7 +94,7 @@ class VelocityField:
 				
      	    # Extract the new velocities
             u, v = Parse_Vector_2d(uv);
-            pdb.set_trace()  
+            #pdb.set_trace()  
 			# Convert 1D to 3D
             #u_new = u.reshape((i, j, k))
             #v_new = v.reshape((i, j, k))
@@ -192,8 +190,8 @@ class ParticleField:
             # velocity functions
             xy0 = np.array(x0 + y0);
             # xy0 = np.array([x0, y0]);
-            print(xy0)
-            pdb.set_trace()
+            #print(xy0)
+            #pdb.set_trace()
     
             # Choose between fields 
 			# Time vector has incorrect shape

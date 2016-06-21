@@ -164,14 +164,14 @@ class Simulation:
                     
                 elif "time" in plot_type:
                     TimelinePlot(ax, ParticleField = self.ParticleField);
-                
+                #pdb.set_trace() 
                 ax.set_xlim(xd);
                 ax.set_ylim([-2, 2]);
                 fig.canvas.draw();
                 time.sleep(0.05)
                 current_time = self.Time.Current;
                 plt.pause(0.0001)
-                
+                #pdb.set_trace() 
         except KeyboardInterrupt:
             pass
         

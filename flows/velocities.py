@@ -1,6 +1,7 @@
 import numpy as np
 import pdb
 import scipy
+# from pycse import bvp
 
 # This function parses a vector
 # of dimensions [2n x 1] into 
@@ -83,7 +84,7 @@ def UniformVelocity(xy, t, extra_args):
     
     return vels;
 
-# Poiseuille velocity function  	
+# Poiseuille velocity function (Laminar)	
 def PoiseuilleVelocity(xy, t, extra_args):
 
     # Parse the input
@@ -97,10 +98,10 @@ def PoiseuilleVelocity(xy, t, extra_args):
 	umax = 1
 	
 	# Pipe radius
-	R = 1
+	R = 3
 	
     # Mean horizontal velocity and vertical velocities
-	u_vel = umax * a * (1 - np.power(y, 2) / np.power(R, 2))
+	u_vel = umax * a * (1 - (np.power(y, 2) / np.power(R, 2)))
 	v_vel = np.zeros((y.shape[0]))
 	
 	#pdb.set_trace();
@@ -159,6 +160,23 @@ def Womersley(xy, t, extra_args):
 '''
 # Blasius Boundary Layer
 def Blasius(xy, t, extra_args):
+    
+    def odefun(F, x):
+        f1, f2, f3 = F
+        return [f2, f3, -0.5 * f1 * f3]
+    def bcfun(Fa, Fb):
+        return [Fa[0], Fa[1], 1.0 - Fb[1]]
+    
+    eta = np.linspace(0, 6, 100)
+    f1init = eta
+    f2init = np.exp(-eta)
+    f3init = np.exp(-eta)
+	
+    Finit = np.vstack([f1init, f2init, f3init])
+    sol = bvp(odefun, bcfun, eta, Finit)
+	
+	
+	
     x, y = Parse_Vector_2d(xy)
 	
     u_vel = U * 

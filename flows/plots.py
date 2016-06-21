@@ -26,19 +26,19 @@ def VectorField(ax, VelocityField = None):
 	
         # Get all velocities
         x, y, z, u, v, w = VelocityField.GetVelocity()
-        print(x.shape)
-        print(y.shape)
-        print(z.shape)
-        print(u.shape)
-        print(v.shape)
-        print(w.shape)
+        #print(x.shape)
+        #print(y.shape)
+        #print(z.shape)
+        #print(u.shape)
+        #print(v.shape)
+        #print(w.shape)
 		
                 
         #pdb.set_trace()
         # Meshgrid the vectors
         x_rec, y_rec, z_rec = np.meshgrid(x, y, z)
         u_rec, v_rec, w_rec = np.meshgrid(u, v, w)
-        pdb.set_trace()
+        #pdb.set_trace()
 		
         # Plot Vector field of velocity
         ax.quiver(x_rec, y_rec, z_rec, u_rec, v_rec, w_rec, length = 0.5)
