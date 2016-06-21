@@ -38,16 +38,23 @@ class Position:
 class VelocityField:
     def __init__(self, x = [0,], y = [0,], z = [0,]):
 		
+		
 		# Initialize field
-        xv = np.linspace(-5, 5, num = 11, endpoint = True)
-        yv = np.linspace(-5, 5, num = 11, endpoint = True)
-        zv = np.linspace(-5, 5, num = 11, endpoint = True)
+        xv = np.linspace(x[0], x[1], num = 20, endpoint = True)
+        yv = np.linspace(y[0], y[1], num = 20, endpoint = True)
+        zv = np.linspace(z[0], z[1], num = 20, endpoint = True)
+		
+        pdb.set_trace()
+		
+        # xv = np.linspace(-5, 5, num = 11, endpoint = True)
+        # yv = np.linspace(-5, 5, num = 11, endpoint = True)
+        # zv = np.linspace(-5, 5, num = 11, endpoint = True)
 	    
 		# Meshgrid field
-        xm, ym, zm = np.meshgrid(xv, yv, zv)
+        # xm, ym, zm = np.meshgrid(xv, yv, zv)
 		
         # Save coordinates
-        self.Coordinates = 	CartesianCoordinates(xm, ym, zm);
+        self.Coordinates = CartesianCoordinates(xv, yv, zv);
 		
         pdb.set_trace()
 		# Initialize Velocity
@@ -64,9 +71,11 @@ class VelocityField:
             xy0 = np.array(x0.tolist() + y0.tolist());
 			
 			# Get shape to resize array 
-            i = x0.shape[0];
-            j = y0.shape[0];
-            k = z0.shape[0];
+            #i = x0.shape[0];
+            #j = y0.shape[0];
+            #k = z0.shape[0];
+			
+            pdb.set_trace();
 			
             # Time vector
             tf = t0 + dt;
@@ -89,13 +98,13 @@ class VelocityField:
             u, v = Parse_Vector_2d(uv);
             pdb.set_trace()  
 			# Convert 1D to 3D
-            u_new = u.reshape((i, j, k))
-            v_new = v.reshape((i, j, k))
+            #u_new = u.reshape((i, j, k))
+            #v_new = v.reshape((i, j, k))
             #pdb.set_trace()  
 			
-           
+            
 			# Set new velocities (2D for now)
-            self.SetVelocity(u_new, v_new);
+            self.SetVelocity(u, v);
 			
 			
 	# This function sets the velocities of the vectorfield

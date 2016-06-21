@@ -87,8 +87,10 @@ class Simulation:
             y = y0[1];
             z = y0[2];
             
+            #pdb.set_trace();
+			
             if "vector" in plot_type.lower():
-                field = VelocityField(x, y, z);
+                field = VelocityField(x_domain, y_domain, z_domain);
 				
                 self.VelocityField = field;
 				
@@ -136,45 +138,39 @@ class Simulation:
         # Read the plot type
         plot_type = self.Parameters.PlotType.lower();
         
-        
+        # and (self.ParticleField.Count) > 0
         # Run while the current time is
         # less than the stopping time
-        try:
-            if "vector" in plot_type:
+        try:        
+            while current_time < stop_time:
+                
+                # Proceed with the next time step
                 self.Step();
-				
-                VectorField(ax, VelocityField = self.VelocityField);
-				
-            else: 
-                while current_time < stop_time and (self.ParticleField.Count) > 0:
-                
-                    # Proceed with the next time step
-                    self.Step();
-                
-                    # Clear axes
-                    ax.clear();
-                    plt.hold(True)
-                
-                    # Check streaklines plot
-                    if "streak" in plot_type:
-                        StreakPlot(ax, ParticleField = self.ParticleField);
-                        #x_streak, y_streak, z_streak, d_streak = self.ParticleField.GetStreaklines();
+               
+                # Clear axes
+                ax.clear();
+                plt.hold(True)
                     
-                    elif "path" in plot_type:
-                        PathlinePlot(ax, ParticleField = self.ParticleField);
+                if "vector" in plot_type:
+                    VectorField(ax, VelocityField = self.VelocityField); 
+                # Check streaklines plot
+                     
+                elif "streak" in plot_type:
+                    StreakPlot(ax, ParticleField = self.ParticleField);
+                    #x_streak, y_streak, z_streak, d_streak = self.ParticleField.GetStreaklines();
                     
-                    elif "time" in plot_type:
-                        TimelinePlot(ax, ParticleField = self.ParticleField);
+                elif "path" in plot_type:
+                    PathlinePlot(ax, ParticleField = self.ParticleField);
+                    
+                elif "time" in plot_type:
+                    TimelinePlot(ax, ParticleField = self.ParticleField);
                 
-                
-				
-                
-                    ax.set_xlim(xd);
-                    ax.set_ylim([-2, 2]);
-                    fig.canvas.draw();
-                    time.sleep(0.05)
-                    current_time = self.Time.Current;
-                    plt.pause(0.0001)
+                ax.set_xlim(xd);
+                ax.set_ylim([-2, 2]);
+                fig.canvas.draw();
+                time.sleep(0.05)
+                current_time = self.Time.Current;
+                plt.pause(0.0001)
                 
         except KeyboardInterrupt:
             pass
